@@ -52,6 +52,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $blogPosts;
 
+    /**
+     * @ORM\OneToOne(targetEntity=VerificationRequest::class, mappedBy="User", cascade={"persist", "remove"})
+     */
+    private $verificationRequest;
+
     public function __construct()
     {
         $this->blogPosts = new ArrayCollection();
@@ -196,6 +201,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $blogPost->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVerificationRequest(): ?VerificationRequest
+    {
+        return $this->verificationRequest;
+    }
+
+    public function setVerificationRequest(VerificationRequest $verificationRequest): self
+    {
+        // set the owning side of the relation if necessary
+        if ($verificationRequest->getUser() !== $this) {
+            $verificationRequest->setUser($this);
+        }
+
+        $this->verificationRequest = $verificationRequest;
 
         return $this;
     }
