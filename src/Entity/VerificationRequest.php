@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\VerificationRequestRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use App\Validator\Constraints\MinimalProperties;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=VerificationRequestRepository::class)
@@ -20,6 +22,7 @@ class VerificationRequest
     private $id;
 
     /**
+     * @Assert\NotBlank 
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="verificationRequest", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -31,6 +34,7 @@ class VerificationRequest
     private $Message;
 
     /**
+     * @Assert\NotBlank 
      * @ORM\Column(type="string", length=255)
      */
     private $IdImageUrl;
