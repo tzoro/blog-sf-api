@@ -49,6 +49,11 @@ class VerificationRequest
      */
     private $RejectReason;
 
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $CreatedAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -110,6 +115,18 @@ class VerificationRequest
     public function setRejectReason(?string $RejectReason): self
     {
         $this->RejectReason = $RejectReason;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->CreatedAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $CreatedAt): self
+    {
+        $this->CreatedAt = $CreatedAt;
 
         return $this;
     }
