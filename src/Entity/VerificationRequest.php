@@ -11,15 +11,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get",
+ *          "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *     },
+ *     itemOperations={
+ *          "get",
+ *          "patch",
+ *          "delete"={"security"="is_granted('ROLE_ADMIN')"},
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=VerificationRequestRepository::class)
  */
-#[ApiFilter(NumericFilter::class, properties: ['user_id'])]
-#[ApiFilter(SearchFilter::class, properties={"request_status": "partial"})]
+#[ApiFilter(SearchFilter::class, properties: ['request_status' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['user_id' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at'], arguments: ['orderParameterName' => 'order'])]
 class VerificationRequest
 {

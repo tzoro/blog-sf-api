@@ -9,7 +9,17 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Validator\Constraints\MinimalProperties;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get"={"security"="is_granted('ROLE_USER')"},
+ *          "post"={"security"="is_granted('ROLE_VERIFIED_USER')"},
+ *     },
+ *     itemOperations={
+ *          "get"={"security"="is_granted('ROLE_USER')"},
+ *          "patch"={"security"="is_granted('ROLE_VERIFIED_USER')"},
+ *          "delete"={"security"="is_granted('ROLE_VERIFIED_USER')"},
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
  */
 class BlogPost
