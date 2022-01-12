@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BlogPostRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use App\Validator\Constraints\MinimalProperties;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
@@ -20,6 +22,7 @@ class BlogPost
     private $id;
 
     /**
+     * @Assert\NotBlank 
      * @ORM\Column(type="string", length=255)
      */
     private $Title;
@@ -30,11 +33,13 @@ class BlogPost
     private $PostDate;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
     private $PostContent;
 
     /**
+     * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="blogPosts")
      * @ORM\JoinColumn(nullable=false)
      */
