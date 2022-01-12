@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,6 +46,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $LastName;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BlogPost::class, mappedBy="Author", orphanRemoval=true)
+     */
+    private $blogPosts;
+
+    public function __construct()
+    {
+        $this->blogPosts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -154,6 +166,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $LastName): self
     {
         $this->LastName = $LastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BlogPost[]
+     */
+    public function getBlogPosts(): Collection
+    {
+        return $this->blogPosts;
+    }
+
+    public function addBlogPost(BlogPost $blogPost): self
+    {
+        if (!$this->blogPosts->contains($blogPost)) {
+            $this->blogPosts[] = $blogPost;
+            $blogPost->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlogPost(BlogPost $blogPost): self
+    {
+        if ($this->blogPosts->removeElement($blogPost)) {
+            // set the owning side to null (unless already changed)
+            if ($blogPost->getAuthor() === $this) {
+                $blogPost->setAuthor(null);
+            }
+        }
 
         return $this;
     }
