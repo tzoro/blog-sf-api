@@ -14,6 +14,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class VerificationRequest
 {
+    function __construct() {
+        $this->setCreatedAt(new \DateTime())
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
