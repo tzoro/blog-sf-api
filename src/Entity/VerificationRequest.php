@@ -8,14 +8,24 @@ use Doctrine\ORM\Mapping as ORM;
 
 use App\Validator\Constraints\MinimalProperties;
 use Symfony\Component\Validator\Constraints as Assert;
+
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=VerificationRequestRepository::class)
  */
+#[ApiFilter(NumericFilter::class, properties: ['user_id'])]
+#[ApiFilter(SearchFilter::class, properties={"request_status": "partial"})]
+#[ApiFilter(OrderFilter::class, properties: ['created_at'], arguments: ['orderParameterName' => 'order'])]
 class VerificationRequest
 {
     function __construct() {
-        $this->setCreatedAt(new \DateTime())
+        $this->setCreatedAt(new \DateTime());
+        $this->getRequestStatus('requested');
     }
 
     /**
